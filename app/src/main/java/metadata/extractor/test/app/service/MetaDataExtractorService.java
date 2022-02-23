@@ -1,7 +1,18 @@
 package metadata.extractor.test.app.service;
 
 
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.metadata.Directory;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.Tag;
+import com.drew.metadata.file.FileTypeDirectory;
 import metadata.extractor.test.app.entity.MetaDataInfo;
+import metadata.extractor.test.app.service.processor.FileTypeProcessor;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class MetaDataExtractorService {
     private String sourceURL;
@@ -11,8 +22,62 @@ public class MetaDataExtractorService {
     }
 
     public MetaDataInfo extract() {
-        FileTypeProcessor fileTypeProcessor = ProcessorFactory.build(sourceURL);
+        try {
+            int weight = 0;
+            Metadata metadata = null;
 
-        return fileTypeProcessor.execute();
+            URL dspFileUrl = new URL(sourceURL);
+            HttpURLConnection connection = (HttpURLConnection) dspFileUrl.openConnection();
+            int responseCode = connection.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                InputStream urlStream = dspFileUrl.openStream();
+                byte[] byteArray = urlStream.readAllBytes();
+                weight = byteArray.length;
+                InputStream targetStream = new ByteArrayInputStream(byteArray);
+                metadata = ImageMetadataReader.readMetadata(targetStream);
+                showMetadata(metadata);
+
+                urlStream.close();
+            }
+            //-------
+
+
+            MetaDataInfo metaDataInfo = new MetaDataInfo();
+            //metaDataInfo.setWeight(conn.getContentLength());
+            metaDataInfo.setWeight(weight);
+
+
+            //Switch
+            Directory fileTypeDirectory = metadata.getFirstDirectoryOfType(FileTypeDirectory.class);
+            String fileTypeName = fileTypeDirectory.getDescription(FileTypeDirectory.TAG_DETECTED_FILE_TYPE_NAME);
+
+
+            FileTypeProcessor processor = AvailableFileType.findProcessor(fileTypeName);
+
+            return processor.execute(metadata, metaDataInfo);
+
+        } catch (Exception exception) {
+
+        }
+        return null;
+    }
+
+    //Borrar
+    private static void showMetadata(Metadata metadata) {
+        System.out.println("\n--- metadata ---");
+        for (Directory directory : metadata.getDirectories()) {
+            for (Tag tag : directory.getTags()) {
+                System.out.format(String.format("\n[%s]\t - %s = %s",
+                        directory.getName(),
+                        tag.getTagName(),
+                        tag.getDescription()));
+            }
+            if (directory.hasErrors()) {
+                for (String error : directory.getErrors()) {
+                    System.err.format("ERROR: %s", error);
+                }
+            }
+        }
     }
 }

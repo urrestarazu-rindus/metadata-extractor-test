@@ -25,33 +25,15 @@ public class App {
     public static void main(final String[] args) {
         System.out.println("Starting..");
         try {
-            //getMetaFromFile();
-
-
-            Metadata urlMetadata = getMetaFromURL();
-
-            MetaDataExtractorService service = new MetaDataExtractorService("https://file-examples-com.github.io/uploads/2018/04/file_example_AVI_480_750kB.avi");
+            //MetaDataExtractorService service = new MetaDataExtractorService("https://file-examples-com.github.io/uploads/2018/04/file_example_AVI_480_750kB.avi");
+            MetaDataExtractorService service = new MetaDataExtractorService("https://cs.adscale.de/2089489571/46735_1080x1920_6000.mp4");
             MetaDataInfo meta = service.extract();
 
             System.out.println();
             System.out.println(meta.toString());
 
-            /*Directory fileTypeDirectory = urlMetadata.getFirstDirectoryOfType(FileTypeDirectory.class);
-
-            System.out.println();
-            System.out.println(
-                    fileTypeDirectory.getTagName(FileTypeDirectory.TAG_DETECTED_FILE_TYPE_NAME) + " - " + fileTypeDirectory.getDescription(FileTypeDirectory.TAG_DETECTED_FILE_TYPE_NAME)
-            );
-
-
-            Directory mp4VideoDirectory = urlMetadata.getFirstDirectoryOfType(Mp4VideoDirectory.class);
-            System.out.println(
-                    mp4VideoDirectory.getTagName(Mp4VideoDirectory.TAG_COMPRESSION_TYPE) + " - " + mp4VideoDirectory.getDescription(Mp4VideoDirectory.TAG_COMPRESSION_TYPE)
-            );
-            System.out.println(
-                    mp4VideoDirectory.getTagName(Mp4VideoDirectory.TAG_FRAME_RATE) + " - " + mp4VideoDirectory.getDescription(Mp4VideoDirectory.TAG_FRAME_RATE)
-            );*/
-
+            //getMetaFromFile();
+            //Metadata urlMetadata = getMetaFromURL();
         } catch (Exception exc) {
             System.out.println(exc.getMessage());
         }
@@ -60,9 +42,9 @@ public class App {
     private static Metadata getMetaFromURL() throws IOException, ImageProcessingException {
         //InputStream inputStream = new URL("https://cs.adscale.de/2089489571/46735_1080x1920_6000.mp4").openStream();
 
-        //URL url = new URL("https://cs.adscale.de/2089489571/46735_1080x1920_6000.mp4");
+        URL url = new URL("https://cs.adscale.de/2089489571/46735_1080x1920_6000.mp4");
         //URL url = new URL("https://www.google.com/images/branding/googlelogo/2x/googlelogo_light_color_272x92dp.png");
-        URL url = new URL("https://file-examples-com.github.io/uploads/2018/04/file_example_AVI_480_750kB.avi");
+        //URL url = new URL("https://file-examples-com.github.io/uploads/2018/04/file_example_AVI_480_750kB.avi");
 
         URLConnection conn = null;
         conn = url.openConnection();

@@ -1,22 +1,17 @@
-package metadata.extractor.test.app.service;
+package metadata.extractor.test.app.service.processor;
 
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.avi.AviDirectory;
 import metadata.extractor.test.app.entity.MetaDataInfo;
+import metadata.extractor.test.app.service.AvailableFileType;
 
 public class AviFileTypeProcessor implements FileTypeProcessor {
-    private final Metadata metaData;
-    protected MetaDataInfo metaDataInfo;
-
-    public AviFileTypeProcessor(Metadata metadata, MetaDataInfo metaDataInfo) {
-        this.metaData = metadata;
-        this.metaDataInfo = metaDataInfo;
-    }
-
     @Override
-    public MetaDataInfo execute() {
-        Directory aviDirectory = this.metaData.getFirstDirectoryOfType(AviDirectory.class);
+    public MetaDataInfo execute(Metadata metadata, MetaDataInfo metaDataInfo) {
+        Directory aviDirectory = metadata.getFirstDirectoryOfType(AviDirectory.class);
+
+        metaDataInfo.setFormat(AvailableFileType.AVI.getFileType());
         metaDataInfo.setCodec(aviDirectory.getDescription(AviDirectory.TAG_VIDEO_CODEC));
         metaDataInfo.setFramerate(Double.parseDouble(aviDirectory.getDescription(AviDirectory.TAG_FRAMES_PER_SECOND)));
 
