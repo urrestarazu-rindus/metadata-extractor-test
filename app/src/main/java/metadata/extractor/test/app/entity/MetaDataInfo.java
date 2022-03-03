@@ -56,8 +56,8 @@ public class MetaDataInfo {
     public String toString() {
         return "MetaDataInfo{" +
                 "format='" + format + '\'' +
-                ", duration=" + duration +
-                ", framerate=" + framerate +
+                ", duration= " + duration +
+                ", framerate= " + framerate +
                 ", codec='" + codec + '\'' +
                 ", weight=" + weight +
                 '}';
