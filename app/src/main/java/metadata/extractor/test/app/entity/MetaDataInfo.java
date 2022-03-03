@@ -2,6 +2,15 @@ package metadata.extractor.test.app.entity;
 
 public class MetaDataInfo {
     String format;
+    //including ms HH:mm:ss ms / ms
+    Long duration;
+    //int height;
+    //int width;
+    Double framerate;
+    String codec;
+    int weight;
+    // MBit/s
+    //int bitrate;
 
     public String getFormat() {
         return format;
@@ -43,14 +52,6 @@ public class MetaDataInfo {
         this.weight = weight;
     }
 
-    //including ms HH:mm:ss ms / ms
-    Long duration;
-    //int height;
-    //int width;
-    Double framerate;
-    String codec;
-    int weight;
-
     @Override
     public String toString() {
         return "MetaDataInfo{" +
@@ -61,6 +62,4 @@ public class MetaDataInfo {
                 ", weight=" + weight +
                 '}';
     }
-    // MBit/s
-    //int bitrate;
 }

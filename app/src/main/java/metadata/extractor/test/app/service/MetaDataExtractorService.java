@@ -35,7 +35,9 @@ public class MetaDataExtractorService {
                 byte[] byteArray = urlStream.readAllBytes();
                 weight = byteArray.length;
                 InputStream targetStream = new ByteArrayInputStream(byteArray);
+
                 metadata = ImageMetadataReader.readMetadata(targetStream);
+
                 showMetadata(metadata);
 
                 urlStream.close();
@@ -58,7 +60,7 @@ public class MetaDataExtractorService {
             return processor.execute(metadata, metaDataInfo);
 
         } catch (Exception exception) {
-
+            System.out.println("Error: MetaDataExtractorService: " + exception.getMessage());
         }
         return null;
     }
@@ -79,5 +81,6 @@ public class MetaDataExtractorService {
                 }
             }
         }
+        System.out.println();
     }
 }
