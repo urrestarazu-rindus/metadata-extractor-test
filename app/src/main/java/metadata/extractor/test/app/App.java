@@ -27,8 +27,8 @@ public class App {
         try {
             //MetaDataExtractorService service = new MetaDataExtractorService("https://file-examples-com.github.io/uploads/2018/04/file_example_AVI_480_750kB.avi");
             //MetaDataExtractorService service = new MetaDataExtractorService("https://cs.adscale.de/2089489571/46735_1080x1920_6000.mp4");
-            MetaDataExtractorService service = new MetaDataExtractorService("https://s3-ap-southeast-2.amazonaws.com/adscale-test-ads/advert2.mp4");
-            //MetaDataExtractorService service = new MetaDataExtractorService("https://file-examples-com.github.io/uploads/2018/04/file_example_MOV_480_700kB.mov");
+            //MetaDataExtractorService service = new MetaDataExtractorService("https://s3-ap-southeast-2.amazonaws.com/adscale-test-ads/advert2.mp4");
+            MetaDataExtractorService service = new MetaDataExtractorService("https://file-examples-com.github.io/uploads/2018/04/file_example_MOV_480_700kB.mov");
             //MetaDataExtractorService service = new MetaDataExtractorService("http://v.adsrvr.org/gtfhv5w/5go2keu/rr1lgovj44f5c064066e4dcd9cf57a1be619858b.webm");
             MetaDataInfo meta = service.extract();
 

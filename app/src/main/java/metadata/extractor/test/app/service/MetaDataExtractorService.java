@@ -44,11 +44,8 @@ public class MetaDataExtractorService {
             }
             //-------
 
-
             MetaDataInfo metaDataInfo = new MetaDataInfo();
-            //metaDataInfo.setWeight(conn.getContentLength());
             metaDataInfo.setWeight(weight);
-
 
             //Switch
             Directory fileTypeDirectory = metadata.getFirstDirectoryOfType(FileTypeDirectory.class);
