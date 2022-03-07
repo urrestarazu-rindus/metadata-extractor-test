@@ -5,8 +5,6 @@ import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
-import com.drew.metadata.file.FileTypeDirectory;
-import com.drew.metadata.mp4.media.Mp4VideoDirectory;
 import metadata.extractor.test.app.entity.MetaDataInfo;
 import metadata.extractor.test.app.service.MetaDataExtractorService;
 
@@ -15,6 +13,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 public class App {
     /**
@@ -28,35 +30,25 @@ public class App {
             //MetaDataExtractorService service = new MetaDataExtractorService("https://file-examples-com.github.io/uploads/2018/04/file_example_AVI_480_750kB.avi");
             //MetaDataExtractorService service = new MetaDataExtractorService("https://cs.adscale.de/2089489571/46735_1080x1920_6000.mp4");
             //MetaDataExtractorService service = new MetaDataExtractorService("https://s3-ap-southeast-2.amazonaws.com/adscale-test-ads/advert2.mp4");
-            MetaDataExtractorService service = new MetaDataExtractorService("https://file-examples-com.github.io/uploads/2018/04/file_example_MOV_480_700kB.mov");
-            //MetaDataExtractorService service = new MetaDataExtractorService("http://v.adsrvr.org/gtfhv5w/5go2keu/rr1lgovj44f5c064066e4dcd9cf57a1be619858b.webm");
+            MetaDataExtractorService service = new MetaDataExtractorService("https://cd.adition.com/assets/adition/3145/22/02/03/14/19/47031_1920x1080_3000.mp4");
+            //MetaDataExtractorService service = new MetaDataExtractorService("https://file-examples-com.github.io/uploads/2018/04/file_example_MOV_480_700kB.mov");
             MetaDataInfo meta = service.extract();
 
             System.out.println();
             System.out.println(meta.toString());
 
+            LocalDateTime dateTime = Instant.ofEpochMilli(meta.getDuration())
+                    .atZone(ZoneId.systemDefault()) // default zone
+                    .toLocalDateTime();
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("mm:ss.SSS");
+
+            System.out.println(formatter.format(dateTime));
+
             //getMetaFromFile();
-            //Metadata urlMetadata = getMetaFromURL();
         } catch (Exception exc) {
             System.out.println(exc.getMessage());
         }
-    }
-
-    private static Metadata getMetaFromURL() throws IOException, ImageProcessingException {
-        //InputStream inputStream = new URL("https://cs.adscale.de/2089489571/46735_1080x1920_6000.mp4").openStream();
-
-        URL url = new URL("https://cs.adscale.de/2089489571/46735_1080x1920_6000.mp4");
-        //URL url = new URL("https://www.google.com/images/branding/googlelogo/2x/googlelogo_light_color_272x92dp.png");
-        //URL url = new URL("https://file-examples-com.github.io/uploads/2018/04/file_example_AVI_480_750kB.avi");
-
-        URLConnection conn = null;
-        conn = url.openConnection();
-        InputStream inputStream = conn.getInputStream();
-        int weight = conn.getContentLength();
-
-        Metadata urlMetadata = ImageMetadataReader.readMetadata(inputStream);
-        //showMetadata(urlMetadata);
-        return urlMetadata;
     }
 
     private static void getMetaFromFile() throws ImageProcessingException, IOException {
