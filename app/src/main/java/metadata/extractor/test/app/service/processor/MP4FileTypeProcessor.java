@@ -15,6 +15,9 @@ public class MP4FileTypeProcessor implements FileTypeProcessor {
 
     @Override
     public MetaDataInfo execute(Metadata metadata, MetaDataInfo metaDataInfo) {
+        long duration;
+        int timeScale;
+
         Directory mp4VideoDirectory = metadata.getFirstDirectoryOfType(Mp4VideoDirectory.class);
 
         metaDataInfo.setFormat(AvailableFileType.MP4.getFileType());
@@ -22,7 +25,10 @@ public class MP4FileTypeProcessor implements FileTypeProcessor {
         metaDataInfo.setFramerate(getFormatedFrameRate(mp4VideoDirectory.getDescription(Mp4VideoDirectory.TAG_FRAME_RATE)));
 
         Directory mp4Directory = metadata.getFirstDirectoryOfType(Mp4Directory.class);
-        metaDataInfo.setDuration(Long.parseLong(mp4Directory.getDescription(Mp4Directory.TAG_DURATION)) / 100);
+
+        duration = Long.parseLong(mp4Directory.getDescription(Mp4Directory.TAG_DURATION));
+        timeScale = (duration > 0)? Integer.parseInt(mp4Directory.getDescription(Mp4Directory.TAG_TIME_SCALE)) : 1;
+        metaDataInfo.setDuration((1000L * duration) / timeScale);
 
         return metaDataInfo;
     }

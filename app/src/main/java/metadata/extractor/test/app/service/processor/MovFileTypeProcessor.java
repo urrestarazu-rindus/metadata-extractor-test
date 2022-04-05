@@ -18,6 +18,7 @@ public class MovFileTypeProcessor implements FileTypeProcessor {
         Long duration = null;
         Double framerate = null;
         String codec = null;
+        int timeScale;
 
         if (metadata == null) {
             return metaDataInfo;
@@ -29,7 +30,8 @@ public class MovFileTypeProcessor implements FileTypeProcessor {
         if (qtDirectory != null){
             format = AvailableFileType.MOV.getFileType();
             duration = Long.parseLong(qtDirectory.getDescription(QuickTimeDirectory.TAG_DURATION));
-
+            timeScale = (duration > 0)? Integer.parseInt(qtDirectory.getDescription(QuickTimeDirectory.TAG_TIME_SCALE)) : 1;
+            duration = (1000L * duration) / timeScale;
             if (qtVideoDirectory!= null) {
                 framerate = getFramerate(framerate, qtVideoDirectory);
                 codec = qtVideoDirectory.getDescription(QuickTimeVideoDirectory.TAG_COMPRESSION_TYPE);
