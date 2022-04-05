@@ -13,8 +13,11 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 public class MetaDataExtractorService {
+    private final double SIZE_MB = Math.pow(1024, 2);
+
     private String sourceURL;
 
     public MetaDataExtractorService(String url) {
@@ -23,7 +26,7 @@ public class MetaDataExtractorService {
 
     public MetaDataInfo extract() {
         try {
-            int weight = 0;
+            double weight = 0.0;
             Metadata metadata = null;
 
             URL dspFileUrl = new URL(sourceURL);
@@ -33,7 +36,10 @@ public class MetaDataExtractorService {
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 InputStream urlStream = dspFileUrl.openStream();
                 byte[] byteArray = urlStream.readAllBytes();
-                weight = byteArray.length;
+
+                String strBytes = new String(byteArray, StandardCharsets.ISO_8859_1);
+
+                weight = byteArray.length / SIZE_MB;
                 InputStream targetStream = new ByteArrayInputStream(byteArray);
 
                 metadata = ImageMetadataReader.readMetadata(targetStream);

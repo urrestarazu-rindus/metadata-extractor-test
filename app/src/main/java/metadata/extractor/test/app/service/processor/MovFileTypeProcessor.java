@@ -7,17 +7,51 @@ import com.drew.metadata.mov.media.QuickTimeVideoDirectory;
 import metadata.extractor.test.app.entity.MetaDataInfo;
 import metadata.extractor.test.app.service.AvailableFileType;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
+
 public class MovFileTypeProcessor implements FileTypeProcessor {
     @Override
     public MetaDataInfo execute(Metadata metadata, MetaDataInfo metaDataInfo) {
+        String format = null;
+        Long duration = null;
+        Double framerate = null;
+        String codec = null;
+
+        if (metadata == null) {
+            return metaDataInfo;
+        }
+
         Directory qtDirectory = metadata.getFirstDirectoryOfType(QuickTimeDirectory.class);
         Directory qtVideoDirectory = metadata.getFirstDirectoryOfType(QuickTimeVideoDirectory.class);
 
-        metaDataInfo.setFormat(AvailableFileType.MOV.getFileType());
-        metaDataInfo.setCodec(qtVideoDirectory.getDescription(QuickTimeVideoDirectory.TAG_COMPRESSION_TYPE));
-        metaDataInfo.setFramerate(Double.parseDouble(qtVideoDirectory.getDescription(QuickTimeVideoDirectory.TAG_FRAME_RATE)));
-        metaDataInfo.setDuration(Long.parseLong(qtDirectory.getDescription(QuickTimeDirectory.TAG_DURATION)));
+        if (qtDirectory != null){
+            format = AvailableFileType.MOV.getFileType();
+            duration = Long.parseLong(qtDirectory.getDescription(QuickTimeDirectory.TAG_DURATION));
 
-        return metaDataInfo;
+            if (qtVideoDirectory!= null) {
+                framerate = getFramerate(framerate, qtVideoDirectory);
+                codec = qtVideoDirectory.getDescription(QuickTimeVideoDirectory.TAG_COMPRESSION_TYPE);
+            }
+        }
+
+        return new MetaDataInfo(format
+                ,duration
+                ,framerate
+                ,codec
+                ,metaDataInfo.getWeight()
+        );
+    }
+
+    private Double getFramerate(Double framerate, Directory qtVideoDirectory) {
+        try {
+            NumberFormat localeFormat = NumberFormat.getInstance(Locale.getDefault());
+            Number number = localeFormat.parse(qtVideoDirectory.getDescription(QuickTimeVideoDirectory.TAG_FRAME_RATE));
+            framerate = number.doubleValue();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return framerate;
     }
 }

@@ -1,6 +1,22 @@
 package metadata.extractor.test.app.entity;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+
 public class MetaDataInfo {
+    public MetaDataInfo() {
+    }
+
+    public MetaDataInfo(String format, Long duration, Double framerate, String codec, Double weight) {
+        this.format = format;
+        this.duration = duration;
+        this.framerate = framerate;
+        this.codec = codec;
+        this.weight = weight;
+    }
+
     String format;
     //including ms HH:mm:ss ms / ms
     Long duration;
@@ -8,7 +24,7 @@ public class MetaDataInfo {
     //int width;
     Double framerate;
     String codec;
-    int weight;
+    Double weight;
     // MBit/s
     //int bitrate;
 
@@ -44,19 +60,25 @@ public class MetaDataInfo {
         this.codec = codec;
     }
 
-    public int getWeight() {
+    public Double getWeight() {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(Double weight) {
         this.weight = weight;
     }
 
     @Override
     public String toString() {
-        return "MetaDataInfo{" +
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("mm:ss.SSS");
+        LocalDateTime ldt = Instant.ofEpochMilli(this.getDuration())
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+        //System.out.println("Formated duration: " + ldt.format(formatter));
+
+        return "MetaDataInfo {" +
                 "format='" + format + '\'' +
-                ", duration= " + duration +
+                ", duration= " + ldt.format(formatter) +
                 ", framerate= " + framerate +
                 ", codec='" + codec + '\'' +
                 ", weight=" + weight +

@@ -27,23 +27,17 @@ public class App {
     public static void main(final String[] args) {
         System.out.println("Starting..");
         try {
-            //MetaDataExtractorService service = new MetaDataExtractorService("https://file-examples-com.github.io/uploads/2018/04/file_example_AVI_480_750kB.avi");
+            //MetaDataExtractorService service = new MetaDataExtractorService("https://filesamples.com/samples/video/avi/sample_960x400_ocean_with_audio.avi");
             //MetaDataExtractorService service = new MetaDataExtractorService("https://cs.adscale.de/2089489571/46735_1080x1920_6000.mp4");
             //MetaDataExtractorService service = new MetaDataExtractorService("https://s3-ap-southeast-2.amazonaws.com/adscale-test-ads/advert2.mp4");
-            MetaDataExtractorService service = new MetaDataExtractorService("https://cd.adition.com/assets/adition/3145/22/02/03/14/19/47031_1920x1080_3000.mp4");
-            //MetaDataExtractorService service = new MetaDataExtractorService("https://file-examples-com.github.io/uploads/2018/04/file_example_MOV_480_700kB.mov");
+            //MetaDataExtractorService service = new MetaDataExtractorService("https://img.taste.com.au/Hp5jidww/w720-h480-cfill-q80/taste/2016/11/pan-seared-salmon-with-smashed-peas-89698-1.jpeg");
+            MetaDataExtractorService service = new MetaDataExtractorService("https://static.sage-archer.com/paas/13405/58762/6a965131-550a-4c55-8759-4a541dd245db.mp4");
+            //MetaDataExtractorService service = new MetaDataExtractorService("https://filesamples.com/samples/video/mov/sample_640x360.mov");
+            //MetaDataExtractorService service = new MetaDataExtractorService("https://static.sage-archer.com/paas/13194/58375/935ec4a5-b257-4f5f-b955-53d1aa43a3c1.jpg");
             MetaDataInfo meta = service.extract();
 
             System.out.println();
             System.out.println(meta.toString());
-
-            LocalDateTime dateTime = Instant.ofEpochMilli(meta.getDuration())
-                    .atZone(ZoneId.systemDefault()) // default zone
-                    .toLocalDateTime();
-
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("mm:ss.SSS");
-
-            System.out.println(formatter.format(dateTime));
 
             //getMetaFromFile();
         } catch (Exception exc) {

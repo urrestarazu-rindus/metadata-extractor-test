@@ -22,7 +22,7 @@ public class MP4FileTypeProcessor implements FileTypeProcessor {
         metaDataInfo.setFramerate(getFormatedFrameRate(mp4VideoDirectory.getDescription(Mp4VideoDirectory.TAG_FRAME_RATE)));
 
         Directory mp4Directory = metadata.getFirstDirectoryOfType(Mp4Directory.class);
-        metaDataInfo.setDuration(Long.parseLong(mp4Directory.getDescription(Mp4Directory.TAG_DURATION)));
+        metaDataInfo.setDuration(Long.parseLong(mp4Directory.getDescription(Mp4Directory.TAG_DURATION)) / 100);
 
         return metaDataInfo;
     }
